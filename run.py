@@ -10,7 +10,30 @@ import tempfile
 import time
 from pathlib import Path
 
-import openai
+# set the URLs of each website, we use the demo sites as an example
+os.environ[
+    "SHOPPING"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:7770"
+os.environ[
+    "SHOPPING_ADMIN"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:7780/admin"
+os.environ[
+    "REDDIT"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:9999"
+os.environ[
+    "GITLAB"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:8023"
+os.environ[
+    "MAP"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:3000"
+os.environ[
+    "WIKIPEDIA"
+] = "http://ec2-3-131-244-37.us-east-2.compute.amazonaws.com:8888/wikipedia_en_all_maxi_2022-05/A/User:The_other_Kiwix_guy/Landing"
+os.environ[
+    "HOMEPAGE"
+] = "PASS"  # The home page is not currently hosted in the demo site
+print("Done setting up URLs")
+from browser_env.env_config import *
 
 from agent import (
     Agent,
@@ -54,7 +77,6 @@ logger.addHandler(file_handler)
 formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 console_handler.setFormatter(formatter)
 file_handler.setFormatter(formatter)
-
 
 def config() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -111,13 +133,13 @@ def config() -> argparse.Namespace:
     )
 
     # lm config
-    parser.add_argument("--provider", type=str, default="openai")
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo-0613")
+    parser.add_argument("--provider", type=str, default="LG")
+    parser.add_argument("--model", type=str, default="blackmamba")
     parser.add_argument("--mode", type=str, default="chat")
-    parser.add_argument("--temperature", type=float, default=1.0)
-    parser.add_argument("--top_p", type=float, default=0.9)
+    parser.add_argument("--temperature", type=float, default=0)
+    parser.add_argument("--top_p", type=float, default=0)
     parser.add_argument("--context_length", type=int, default=0)
-    parser.add_argument("--max_tokens", type=int, default=384)
+    parser.add_argument("--max_tokens", type=int, default=65586)
     parser.add_argument("--stop_token", type=str, default=None)
     parser.add_argument(
         "--max_retry",
@@ -129,7 +151,7 @@ def config() -> argparse.Namespace:
         "--max_obs_length",
         type=int,
         help="when not zero, will truncate the observation to this length before feeding to the model",
-        default=1920,
+        default=0,
     )
     parser.add_argument(
         "--model_endpoint",
@@ -429,7 +451,7 @@ if __name__ == "__main__":
     else:
         print(f"Total {len(test_file_list)} tasks left")
         args.render = False
-        args.render_screenshot = True
+        args.render_screenshot = False
         args.save_trace_enabled = True
 
         args.current_viewport_only = True

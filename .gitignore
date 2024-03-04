@@ -136,9 +136,6 @@ dmypy.json
 
 .auth/*
 
-# local debug
-run.sh
-
 # trajectory visualization
 render_cache/*
 cache/*
