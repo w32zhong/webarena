@@ -133,7 +133,7 @@ def config() -> argparse.Namespace:
     )
 
     # lm config
-    parser.add_argument("--provider", type=str, default="LG")
+    parser.add_argument("--provider", type=str, default="huggingface")
     parser.add_argument("--model", type=str, default="blackmamba")
     parser.add_argument("--mode", type=str, default="chat")
     parser.add_argument("--temperature", type=float, default=0)
@@ -451,7 +451,7 @@ if __name__ == "__main__":
     else:
         print(f"Total {len(test_file_list)} tasks left")
         args.render = False
-        args.render_screenshot = False
+        args.render_screenshot = True
         args.save_trace_enabled = True
 
         args.current_viewport_only = True

@@ -170,6 +170,7 @@ def construct_agent(args: argparse.Namespace) -> Agent:
         prompt_constructor = eval(constructor_type)(
             args.instruction_path, lm_config=llm_config, tokenizer=tokenizer
         )
+        breakpoint()
         agent = PromptAgent(
             action_set_tag=args.action_set_tag,
             lm_config=llm_config,
