@@ -1,3 +1,6 @@
 [submodule "blackmamba-fork"]
 	path = blackmamba-fork
 	url = git@github.com:w32zhong/blackmamba-fork.git
+[submodule "causal-conv1d"]
+	path = causal-conv1d
+	url = git@github.com:Dao-AILab/causal-conv1d.git
