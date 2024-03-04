@@ -120,7 +120,18 @@ class PromptAgent(Agent):
             model = MambaModel.from_pretrained(
                 pretrained_model_name=self.lm_config.model
             )
-            self.hgf_model = model.cuda().half()
+            model = model.cpu()
+            torch.cuda.empty_cache()
+            mid = len(model.decoder.layers) // 2
+            model.embedding = model.embedding.to('cuda:0')
+            model.decoder.final_layernorm = model.decoder.final_layernorm.to('cuda:1')
+            model.output_layer = model.output_layer.to('cuda:1')
+            for i in range(mid):
+                model.decoder.layers[i] = model.decoder.layers[i].to('cuda:0')
+            for i in range(mid, len(model.decoder.layers)):
+                model.decoder.layers[i] = model.decoder.layers[i].to('cuda:1')
+            self.hgf_model = model.to(dtype=torch.bfloat16)
+            #self.hgf_model = model.half()
         else:
             self.hgf_model = None
 

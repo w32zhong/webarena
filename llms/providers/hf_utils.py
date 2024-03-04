@@ -1,3 +1,5 @@
+import torch
+
 def generate_from_huggingface_completion(
     agent,
     prompt: str,
@@ -11,14 +13,16 @@ def generate_from_huggingface_completion(
     answer = ''
     tokenizer = tokenizer.tokenizer
     model = agent.hgf_model
+    model.eval()
     inputs = tokenizer.encode(prompt, return_tensors='pt').cuda()
     while answer.count('\n') == 0:
-        breakpoint()
-        out_logits = model(inputs)
+        model.embedding = model.embedding.to('cuda:0')
+        with torch.no_grad():
+            out_logits = model(inputs)
         last_logits = out_logits[:, -1]
         pred_vocab = last_logits.argmax(dim=-1)
         out_token = tokenizer.decode(pred_vocab)
-        print(out_token.replace('\n', '<NL>'), end='', flush=True)
+        print(out_token, end='', flush=True)
         answer += out_token
         inputs = torch.concat((inputs, pred_vocab.unsqueeze(0)), -1)
     return answer
