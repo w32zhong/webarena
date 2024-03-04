@@ -76,36 +76,23 @@ class PromptConstructor(object):
                     f"OpenAI models do not support mode {self.lm_config.mode}"
                 )
         elif "huggingface" in self.lm_config.provider:
-            # https://huggingface.co/blog/llama2#how-to-prompt-llama-2
-            # https://github.com/facebookresearch/llama/blob/main/llama/generation.py#L320
-            if "Llama-2" in self.lm_config.model:
-                if self.lm_config.mode == "chat":
-                    B_INST, E_INST = "[INST]", "[/INST]"
-                    B_SYS, E_SYS = "<<SYS>>\n", "\n<</SYS>>\n\n"
-                    BOS, EOS = "<s>", "</s>"
-                    # adding the system message to be the starting of the first example
-                    examples = [
-                        (
-                            B_SYS + intro + E_SYS + examples[0][0],
-                            examples[0][1],
-                        )
-                    ] + examples[1:]
-                    message = "".join(
-                        [
-                            f"{BOS}{B_INST} {x.strip()} {E_INST} {y.strip()} {EOS}"
-                            for (x, y) in examples
-                        ]
-                    )
-                    # add the current observation
-                    message += f"{BOS}{B_INST} {current.strip()} {E_INST} {self.instruction['meta_data'].get('force_prefix', '')}"
-
-                    return message
-                else:
-                    raise ValueError("Only chat mode is supported for Llama-2")
-            else:
-                raise ValueError(
-                    f"Huggingface models do not support model_tag {self.lm_config.gen_config['model_tag']}"
+            message = [{"role": "system", "content": intro}]
+            for (x, y) in examples:
+                message.append(
+                    {
+                        "role": "user",
+                        "content": x,
+                    }
                 )
+                message.append(
+                    {
+                        "role": "assistant",
+                        "content": y,
+                    }
+                )
+            message.append({"role": "user", "content": current})
+            prompt = self.tokenizer.tokenizer.apply_chat_template(message, tokenize=False)
+            return prompt
         else:
             raise NotImplementedError(
                 f"Provider {self.lm_config.provider} not implemented"

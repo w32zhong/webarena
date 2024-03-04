@@ -1,3 +1,4 @@
+import sys
 import argparse
 import json
 from typing import Any
@@ -112,7 +113,19 @@ class PromptAgent(Agent):
         self.prompt_constructor = prompt_constructor
         self.action_set_tag = action_set_tag
 
+        if 'BlackMamba' in self.lm_config.model:
+            sys.path.insert(0, 'blackmamba-fork')
+            import torch
+            from mamba_model import MambaModel
+            model = MambaModel.from_pretrained(
+                pretrained_model_name=self.lm_config.model
+            )
+            self.hgf_model = model.cuda().half()
+        else:
+            self.hgf_model = None
+
     def set_action_set_tag(self, tag: str) -> None:
+        print('[action tag]', tag)
         self.action_set_tag = tag
 
     @beartype
@@ -125,7 +138,7 @@ class PromptAgent(Agent):
         lm_config = self.lm_config
         n = 0
         while True:
-            response = call_llm(lm_config, prompt)
+            response = call_llm(lm_config, prompt, self.prompt_constructor.tokenizer)
             force_prefix = self.prompt_constructor.instruction[
                 "meta_data"
             ].get("force_prefix", "")
@@ -154,7 +167,7 @@ class PromptAgent(Agent):
         return action
 
     def reset(self, test_config_file: str) -> None:
-        pass
+        print('[agent reset]', test_config_file)
 
 
 def construct_agent(args: argparse.Namespace) -> Agent:
