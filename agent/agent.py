@@ -133,7 +133,12 @@ class PromptAgent(Agent):
             self.hgf_model = model.to(dtype=torch.bfloat16)
             #self.hgf_model = model.half()
         else:
-            self.hgf_model = None
+            sys.path.insert(0, 'mamba/build/lib.linux-x86_64-cpython-310')
+            import torch
+            from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
+            model = MambaLMHeadModel.from_pretrained(self.lm_config.model,
+                device="cuda", dtype=torch.bfloat16)
+            self.hgf_model = model
 
     def set_action_set_tag(self, tag: str) -> None:
         print('[action tag]', tag)
