@@ -134,7 +134,8 @@ def config() -> argparse.Namespace:
 
     # lm config
     parser.add_argument("--provider", type=str, default="huggingface")
-    parser.add_argument("--model", type=str, default="blackmamba")
+    parser.add_argument("--tokenizer", type=str, default="none")
+    parser.add_argument("--model", type=str, default="none")
     parser.add_argument("--mode", type=str, default="chat")
     parser.add_argument("--temperature", type=float, default=0)
     parser.add_argument("--top_p", type=float, default=0)
