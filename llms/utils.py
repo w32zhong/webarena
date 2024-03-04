@@ -12,6 +12,7 @@ APIInput = str | list[Any] | dict[str, Any]
 
 
 def call_llm(
+    agent,
     lm_config: lm_config.LMConfig,
     prompt: APIInput,
     tokenizer
@@ -44,6 +45,7 @@ def call_llm(
             )
     elif lm_config.provider == "huggingface":
         response = generate_from_huggingface_completion(
+            agent=agent,
             prompt=prompt,
             tokenizer=tokenizer,
             model_endpoint=lm_config.gen_config["model_endpoint"],

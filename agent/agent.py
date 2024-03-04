@@ -138,7 +138,7 @@ class PromptAgent(Agent):
         lm_config = self.lm_config
         n = 0
         while True:
-            response = call_llm(lm_config, prompt, self.prompt_constructor.tokenizer)
+            response = call_llm(self, lm_config, prompt, self.prompt_constructor.tokenizer)
             force_prefix = self.prompt_constructor.instruction[
                 "meta_data"
             ].get("force_prefix", "")
