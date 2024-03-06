@@ -16,7 +16,7 @@ def generate_from_huggingface_completion(
     model.eval()
     inputs = tokenizer.encode(prompt, return_tensors='pt').cuda()
     while '<|endoftext|>' not in answer: #answer.count('\n') == 0:
-        # model.embedding = model.embedding.to('cuda:0')
+        model.embedding = model.embedding.to(inputs.device)
         with torch.no_grad():
             out_logits = model(inputs)
         if isinstance(out_logits, torch.Tensor):
