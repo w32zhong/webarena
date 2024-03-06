@@ -114,7 +114,7 @@ class PromptAgent(Agent):
         self.action_set_tag = action_set_tag
 
         if 'BlackMamba' in self.lm_config.model:
-            sys.path.insert(0, 'blackmamba-fork')
+            sys.path.insert(0, '3rd_party/blackmamba')
             import torch
             from mamba_model import MambaModel
             model = MambaModel.from_pretrained(
@@ -133,7 +133,6 @@ class PromptAgent(Agent):
             self.hgf_model = model.to(dtype=torch.float16)
             #self.hgf_model = model.half()
         else:
-            sys.path.insert(0, 'mamba/build/lib.linux-x86_64-cpython-310')
             import torch
             from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
             model = MambaLMHeadModel.from_pretrained(self.lm_config.model,
