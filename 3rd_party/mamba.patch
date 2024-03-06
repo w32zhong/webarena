@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index d2a1f2f..5be88c2 100644
+--- a/setup.py
++++ b/setup.py
+@@ -105,6 +105,8 @@ if not SKIP_CUDA_BUILD:
+                 "Note: make sure nvcc has a supported version by running nvcc -V."
+             )
+ 
++    cc_flag.append("-gencode")
++    cc_flag.append("arch=compute_61,code=sm_61")
+     cc_flag.append("-gencode")
+     cc_flag.append("arch=compute_70,code=sm_70")
+     cc_flag.append("-gencode")
