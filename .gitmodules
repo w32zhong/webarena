@@ -1,0 +1,3 @@
+[submodule "3rd_party/blackmamba"]
+	path = 3rd_party/blackmamba
+	url = https://github.com/w32zhong/blackmamba-fork.git
