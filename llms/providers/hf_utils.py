@@ -14,8 +14,12 @@ def generate_from_huggingface_completion(
     tokenizer = tokenizer.tokenizer
     model = agent.hgf_model
     model.eval()
+    print('~' * 60)
+    print(prompt)
+    print('=' * 60)
     inputs = tokenizer.encode(prompt, return_tensors='pt').cuda()
-    while '<|endoftext|>' not in answer: #answer.count('\n') == 0:
+    prompt_tokens = inputs.shape[-1]
+    while '<|endoftext|>' not in answer and all_tokens - prompt_tokens > max_new_tokens:
         if hasattr(model, 'embedding'):
             model.embedding = model.embedding.to(inputs.device)
         with torch.no_grad():
@@ -29,4 +33,5 @@ def generate_from_huggingface_completion(
         print(out_token, end='', flush=True)
         answer += out_token
         inputs = torch.concat((inputs, pred_vocab.unsqueeze(0)), -1)
+        all_tokens = inputs.shape[-1]
     return answer
