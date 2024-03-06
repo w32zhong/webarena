@@ -4,3 +4,6 @@
 [submodule "3rd_party/causal-conv1d"]
 	path = 3rd_party/causal-conv1d
 	url = https://github.com/Dao-AILab/causal-conv1d.git
+[submodule "3rd_party/mamba"]
+	path = 3rd_party/mamba
+	url = git@github.com:state-spaces/mamba.git
