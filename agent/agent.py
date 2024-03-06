@@ -130,14 +130,14 @@ class PromptAgent(Agent):
                 model.decoder.layers[i] = model.decoder.layers[i].to('cuda:0')
             for i in range(mid, len(model.decoder.layers)):
                 model.decoder.layers[i] = model.decoder.layers[i].to('cuda:1')
-            self.hgf_model = model.to(dtype=torch.bfloat16)
+            self.hgf_model = model.to(dtype=torch.float16)
             #self.hgf_model = model.half()
         else:
             sys.path.insert(0, 'mamba/build/lib.linux-x86_64-cpython-310')
             import torch
             from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
             model = MambaLMHeadModel.from_pretrained(self.lm_config.model,
-                device="cuda", dtype=torch.bfloat16)
+                device="cuda", dtype=torch.float16)
             self.hgf_model = model
 
     def set_action_set_tag(self, tag: str) -> None:
