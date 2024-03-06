@@ -27,4 +27,5 @@ ADD . webarena
 RUN cd ./webarena; \
     pip install -r requirements.txt; \
     pip install -e .
-CMD /bin/bash
+WORKDIR /workspace/webarena
+CMD ./run.sh
