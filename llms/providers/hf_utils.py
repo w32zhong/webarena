@@ -18,8 +18,8 @@ def generate_from_huggingface_completion(
     print(prompt)
     print('=' * 60)
     inputs = tokenizer.encode(prompt, return_tensors='pt').cuda()
-    prompt_tokens = inputs.shape[-1]
-    while '<|endoftext|>' not in answer and all_tokens - prompt_tokens > max_new_tokens:
+    all_tokens = prompt_tokens = inputs.shape[-1]
+    while '<|endoftext|>' not in answer and all_tokens - prompt_tokens < max_new_tokens:
         if hasattr(model, 'embedding'):
             model.embedding = model.embedding.to(inputs.device)
         with torch.no_grad():
