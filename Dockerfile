@@ -27,5 +27,6 @@ ADD . webarena
 RUN cd ./webarena; \
     pip install -r requirements.txt; \
     pip install -e .
+RUN python -c 'import nltk; nltk.download("punkt")'
 WORKDIR /workspace/webarena
 CMD ./run.sh
