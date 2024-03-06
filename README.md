@@ -2,7 +2,7 @@
 Upstream: https://github.com/web-arena-x/webarena
 
 ```bash
-docker build . -t webarena
+docker build . --progress=plain -t webarena
 docker run --gpus all --ipc=host --ulimit memlock=-1 \
     -v $HOME/.cache:/root/.cache \
     -v `pwd`/output:/workspace/output \
