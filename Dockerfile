@@ -20,10 +20,11 @@ RUN cd ./3rd_party/mamba; \
     python setup.py install; \
     rm -rf build/ *.egg-info dist; \
     echo python ../mamba.test.py
+RUN pip install playwright==1.32.1; \
+    playwright install-deps; \
+    playwright install
 ADD . webarena
 RUN cd ./webarena; \
     pip install -r requirements.txt; \
-    playwright install-deps; \
-    playwright install; \
     pip install -e .
 CMD /bin/bash
