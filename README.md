@@ -2,11 +2,13 @@
 Upstream: https://github.com/web-arena-x/webarena
 
 ```bash
+git submodule init
+git submodule update
 docker build . --progress=plain -t webarena
 docker run --gpus all --ipc=host --ulimit memlock=-1 \
     -v $HOME/.cache:/root/.cache \
     -v `pwd`/output:/workspace/webarena/output \
-    -it webarena
+    -it webarena ./run.sh
 ```
 
 Refer to [run.sh](./run.sh) for evaluation commands.
