@@ -1,5 +1,5 @@
 """This module is adapt from https://github.com/zeno-ml/zeno-build"""
-from .providers.hf_utils import generate_from_huggingface_completion
+from .providers.hf_utils import *
 from .providers.openai_utils import (
     generate_from_openai_chat_completion,
     generate_from_openai_completion,

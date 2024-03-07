@@ -11,3 +11,5 @@ flask
 nltk
 text-generation
 transformers==4.38.2
+accelerate
+bitsandbytes

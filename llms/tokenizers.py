@@ -8,7 +8,7 @@ class Tokenizer(object):
     def __init__(self, provider: str, model_name: str) -> None:
         if provider == "openai":
             self.tokenizer = tiktoken.encoding_for_model(model_name)
-        elif provider == "huggingface":
+        elif provider.startswith("huggingface"):
             self.tokenizer = AutoTokenizer.from_pretrained(model_name)
             # turn off adding special tokens automatically
             self.tokenizer.add_special_tokens = False  # type: ignore[attr-defined]

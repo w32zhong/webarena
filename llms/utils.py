@@ -2,6 +2,7 @@ import argparse
 from typing import Any
 
 from llms import (
+    generate_from_huggingface,
     generate_from_huggingface_completion,
     generate_from_openai_chat_completion,
     generate_from_openai_completion,
@@ -45,6 +46,17 @@ def call_llm(
             )
     elif lm_config.provider == "huggingface":
         response = generate_from_huggingface_completion(
+            agent=agent,
+            prompt=prompt,
+            tokenizer=tokenizer,
+            model_endpoint=lm_config.gen_config["model_endpoint"],
+            temperature=lm_config.gen_config["temperature"],
+            top_p=lm_config.gen_config["top_p"],
+            stop_sequences=lm_config.gen_config["stop_sequences"],
+            max_new_tokens=lm_config.gen_config["max_new_tokens"],
+        )
+    elif lm_config.provider == "huggingface_generator":
+        response = generate_from_huggingface(
             agent=agent,
             prompt=prompt,
             tokenizer=tokenizer,

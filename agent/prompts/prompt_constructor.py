@@ -91,7 +91,8 @@ class PromptConstructor(object):
                     }
                 )
             message.append({"role": "user", "content": current})
-            prompt = self.tokenizer.tokenizer.apply_chat_template(message, tokenize=False)
+            prompt = self.tokenizer.tokenizer.apply_chat_template(message,
+                tokenize=False, add_generation_prompt=True)
             return prompt
         else:
             raise NotImplementedError(

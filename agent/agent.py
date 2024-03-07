@@ -132,12 +132,23 @@ class PromptAgent(Agent):
                 model.decoder.layers[i] = model.decoder.layers[i].to('cuda:1')
             self.hgf_model = model.to(dtype=torch.float16)
             #self.hgf_model = model.half()
-        else:
+
+        elif 'mamba-chat' in self.lm_config.model:
             import torch
             from mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
             model = MambaLMHeadModel.from_pretrained(self.lm_config.model,
                 device="cuda", dtype=torch.float16)
             self.hgf_model = model
+
+        else:
+            import torch
+            from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+            model = AutoModelForCausalLM.from_pretrained(
+                self.lm_config.model, device_map="auto",
+                torch_dtype=torch.float16, load_in_4bit=True
+            )
+            self.hgf_model = model
+            self.hgf_gen_config = GenerationConfig.from_pretrained(self.lm_config.model)
 
     def set_action_set_tag(self, tag: str) -> None:
         print('[action tag]', tag)
