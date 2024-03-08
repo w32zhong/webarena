@@ -25,7 +25,7 @@ RUN pip install playwright==1.32.1; \
     playwright install
 ADD . webarena
 RUN cd ./webarena; \
-    pip install -r requirements.txt; \
+    pip install --ignore-installed -r requirements.txt; \
     pip install -e .
 RUN python -c 'import nltk; nltk.download("punkt")'
 WORKDIR /workspace/webarena
